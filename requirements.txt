@@ -4,3 +4,4 @@ Flask-Marshmallow
 python-dotenv
 
 pandas~=2.2.3
+psycopg2-binary
