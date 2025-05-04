@@ -1,5 +1,5 @@
 
-from .user_routes import bp as user_bp
+from .games_routes import games_bp
 
 def register_blueprints(app):
-    app.register_blueprint(user_bp)
+    app.register_blueprint(games_bp)
