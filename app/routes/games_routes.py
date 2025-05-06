@@ -1,9 +1,16 @@
 from flask import Blueprint, jsonify, abort, make_response, request
 
-from app.services.games_service import get_games_info, get_game_by_id, delete_game_by_id, insert_game, update_game_by_id
+from app.services.games_service import (
+    get_games_info,
+    get_game_by_id,
+    delete_game_by_id,
+    insert_game,
+    update_game_by_id,
+)
 from app.schemas import games_cschema, game_cschema
 
-games_bp = Blueprint('games', __name__, url_prefix='/api/v1/games')
+games_bp = Blueprint("games", __name__, url_prefix="/api/v1/games")
+
 
 @games_bp.errorhandler(404)
 def page_not_found(error):
@@ -15,17 +22,19 @@ def bad_request(error):
     return make_response(jsonify({"error": "Bad Request"}), 400)
 
 
-@games_bp.route('', methods=['GET'])
+@games_bp.route("", methods=["GET"])
 def get_games():
     games = get_games_info()
-    return jsonify({'games': games_cschema.dump(games)})
+    return jsonify({"games": games_cschema.dump(games)})
 
-@games_bp.route('/<int:id>', methods=['GET'])
+
+@games_bp.route("/<int:id>", methods=["GET"])
 def get_game_from_id(id):
     game = get_game_by_id(id)
     if game is None:
         abort(404)
     return jsonify(game_cschema.dump(game))
+
 
 @games_bp.route("", methods=["POST"])
 def create_game():
@@ -47,6 +56,7 @@ def create_game():
 
     created_game = insert_game(new_game_data)
     return jsonify({"game": game_cschema.dump(created_game)}), 201
+
 
 @games_bp.route("/<int:id>", methods=["PUT"])
 def update_game(id):
@@ -75,10 +85,10 @@ def update_game(id):
     return jsonify({"game": game_cschema.dump(updated_game)})
 
 
-@games_bp.route('/<int:id>', methods=['DELETE'])
+@games_bp.route("/<int:id>", methods=["DELETE"])
 def delete_game_from_id(id):
     game = get_game_by_id(id)
     if game is None:
         abort(404)
     delete_game_by_id(id)
-    return jsonify({'success': True})
+    return jsonify({"success": True})

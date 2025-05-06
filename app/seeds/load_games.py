@@ -1,14 +1,23 @@
 import pandas as pd
 from app.extensions import db
-from app.models import Developer, Publisher, Game, Platform, PlatformGame, Category, CategoryGame
+from app.models import (
+    Developer,
+    Publisher,
+    Game,
+    Platform,
+    PlatformGame,
+    Category,
+    CategoryGame,
+)
 from sqlalchemy.exc import ProgrammingError
 import psycopg2
+
 
 def load_data(csv_path):
     df = pd.read_csv(csv_path)
 
     # Преобразуем даты сразу для всего DataFrame
-    df['release_date'] = pd.to_datetime(df['release_date'])
+    df["release_date"] = pd.to_datetime(df["release_date"])
 
     # Кэш для уже обработанных записей
     developers_cache = {}
@@ -38,7 +47,9 @@ def load_data(csv_path):
                     publishers_cache[publisher_name] = publisher.id
                 except ProgrammingError as e:
                     if isinstance(e.orig, psycopg2.errors.UndefinedFunction):
-                        print(f"Пропускаем publisher с несовместимым типом: {publisher_name}")
+                        print(
+                            f"Пропускаем publisher с несовместимым типом: {publisher_name}"
+                        )
                         publishers_cache[publisher_name] = None
                     else:
                         raise
@@ -68,10 +79,11 @@ def load_data(csv_path):
                         db.session.flush()
                     platforms_cache[platform_name] = platform.id
 
-                db.session.add(PlatformGame(
-                    platform_id=platforms_cache[platform_name],
-                    game_id=game.id
-                ))
+                db.session.add(
+                    PlatformGame(
+                        platform_id=platforms_cache[platform_name], game_id=game.id
+                    )
+                )
 
             for category_name in row["categories"].split(";"):
                 if category_name not in categories_cache:
@@ -82,14 +94,17 @@ def load_data(csv_path):
                         db.session.flush()
                     categories_cache[category_name] = category.id
 
-                db.session.add(CategoryGame(
-                    category_id=categories_cache[category_name],
-                    game_id=game.id
-                ))
+                db.session.add(
+                    CategoryGame(
+                        category_id=categories_cache[category_name], game_id=game.id
+                    )
+                )
 
             db.session.commit()
 
         except Exception as e:
             db.session.rollback()
-            print(f"Ошибка при обработке игры {row['name']} (ID: {row['appid']}): {str(e)}")
+            print(
+                f"Ошибка при обработке игры {row['name']} (ID: {row['appid']}): {str(e)}"
+            )
             continue

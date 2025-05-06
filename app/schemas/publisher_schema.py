@@ -1,5 +1,6 @@
 from marshmallow import Schema, fields
 
+
 class PublisherGameStatsSchema(Schema):
     publisher_id = fields.Int()
     publisher_name = fields.Str()
@@ -17,5 +18,6 @@ class PublisherGameStatsSchema(Schema):
     max_price = fields.Float()
 
     game_count = fields.Int()
+
 
 publisher_schema = PublisherGameStatsSchema(many=True)
