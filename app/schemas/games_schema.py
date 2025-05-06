@@ -8,17 +8,21 @@ from app.models import (
     Publisher,
 )
 
+
 class CategorySchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Category
+
 
 class PlatformSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Platform
 
+
 class DeveloperSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Developer
+
 
 class PublisherSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
@@ -37,6 +41,7 @@ class GameSchema(ma.SQLAlchemyAutoSchema):
 
     categories = ma.Nested(CategorySchema, many=True)
     platforms = ma.Nested(PlatformSchema, many=True)
+
 
 game_cschema = GameSchema()
 games_cschema = GameSchema(many=True)
