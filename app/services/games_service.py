@@ -7,7 +7,7 @@ from app.extensions import db
 
 
 def get_games_info():
-    query = Game.query.limit(100)
+    query = Game.query.limit(300)
     return query.all()
 
 
