@@ -20,7 +20,7 @@ services:
     container_name: flask_db
     restart: always
     ports:
-      - "${POSTGRES_OUTER_PORT}:${POSTGRES_INNER_PORT}"
+      - "${POSTGRES_PORT}"
     env_file:
       - ./.env
     volumes:
