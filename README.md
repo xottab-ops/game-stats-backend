@@ -18,7 +18,7 @@ This project is a REST API for managing video game information. The API provides
 
 ```bash
 git clone <repository-url>
-cd Practice_Project_2
+cd game-stats-backend
 ```
 
 ### 2. Configure Environment Variables
@@ -29,17 +29,18 @@ Ensure the `.env` file in the project root is configured as follows:
 # Flask
 FLASK_APP=app.py
 FLASK_ENV=development
-FLASK_INNER_PORT=5001
-FLASK_OUTER_PORT=5002
+FLASK_INNER_PORT=5000
+FLASK_OUTER_PORT=5000
 
 # Database
 POSTGRES_DB=flask_db
 POSTGRES_USER=flask_user
 POSTGRES_PASSWORD=flask_password
 POSTGRES_HOST=db
-POSTGRES_INNER_PORT=5432
-POSTGRES_OUTER_PORT=5200
-DATABASE_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_INNER_PORT}/${POSTGRES_DB}
+POSTGRES_PORT=5432
+
+# Database URI for application
+DATABASE_URI=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
 ```
 
 ### 3. Run with Docker
@@ -84,7 +85,7 @@ Once running, the application will be accessible at: [http://localhost:5000](htt
 ## Project Structure
 
 ```
-Practice_Project_2/
+game-stats-backend/
 ├── app/
 │   ├── dto/            # Data Transfer Objects (DTOs) for structured data handling
 │   ├── models/         # Database models
