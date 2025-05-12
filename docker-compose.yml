@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  web:
+  backend:
     build: .
     container_name: flask_app
     env_file:
@@ -9,7 +9,8 @@ services:
     ports:
       - "${FLASK_OUTER_PORT}:${FLASK_INNER_PORT}"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     volumes:
       - .:/app
     command: flask run --host=0.0.0.0 -p ${FLASK_INNER_PORT}
