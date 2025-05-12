@@ -15,7 +15,7 @@ services:
       - .:/app
     command: flask run --host=0.0.0.0 -p ${FLASK_INNER_PORT}
     healthcheck:
-      test: [ "CMD", "curl", "-f", "http://localhost:${FLASK_INNER_PORT}/api/v1/health" ]
+      test: [ "CMD", "curl", "-f", "http://localhost:${FLASK_INNER_PORT}/health" ]
       interval: 30s
       timeout: 10s
       retries: 3
