@@ -1,4 +1,4 @@
-# Practice Project 2
+# Game Statistic (Backend)
 
 ## Project Description
 
