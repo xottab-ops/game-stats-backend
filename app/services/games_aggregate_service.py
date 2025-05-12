@@ -15,19 +15,20 @@ def get_developers_aggregate():
             Developer.id,
             Developer.name,
             func.min(Game.positive_rating),
-            func.avg(Game.positive_rating),
+            func.round(func.avg(Game.positive_rating) * 100) / 100,
             func.max(Game.positive_rating),
             func.min(Game.negative_rating),
-            func.avg(Game.negative_rating),
+            func.round(func.avg(Game.negative_rating) * 100) / 100,
             func.max(Game.negative_rating),
             func.min(Game.price),
-            func.avg(Game.price),
+            func.round(func.avg(Game.price) * 100) / 100,
             func.max(Game.price),
             func.count(Game.id),
         )
         .join(Game, Game.developer_id == Developer.id)
         .group_by(Developer.id)
-        .all()
+        .order_by(func.count(Game.id).desc(), func.avg(Game.price).desc())
+        .limit(20)
     )
     stats_objects = [DeveloperGameStatsDTO(*row) for row in results][:100]
     return stats_objects
@@ -39,19 +40,20 @@ def get_publisher_aggregate():
             Publisher.id,
             Publisher.name,
             func.min(Game.positive_rating),
-            func.avg(Game.positive_rating),
+            func.round(func.avg(Game.positive_rating) * 100) / 100,
             func.max(Game.positive_rating),
             func.min(Game.negative_rating),
-            func.avg(Game.negative_rating),
+            func.round(func.avg(Game.negative_rating) * 100) / 100,
             func.max(Game.negative_rating),
             func.min(Game.price),
-            func.avg(Game.price),
+            func.round(func.avg(Game.price) * 100) / 100,
             func.max(Game.price),
             func.count(Game.id),
         )
         .join(Game, Game.publisher_id == Publisher.id)
         .group_by(Publisher.id)
-        .all()
+        .order_by(func.count(Game.id).desc(), func.avg(Game.price).desc())
+        .limit(20)
     )
     stats_objects = [PublisherGameStatsDTO(*row) for row in results][:100]
     return stats_objects

@@ -1,4 +1,5 @@
 from app.extensions import db, ma
+from marshmallow import fields, post_dump
 
 from app.models import (
     Game,
@@ -39,9 +40,29 @@ class GameSchema(ma.SQLAlchemyAutoSchema):
     developer = ma.Nested(DeveloperSchema)
     publisher = ma.Nested(PublisherSchema)
 
+    _links = fields.Method('get_links')
+
     categories = ma.Nested(CategorySchema, many=True)
     platforms = ma.Nested(PlatformSchema, many=True)
 
+    def get_links(self, obj):
+        return {
+            "self": {"href": f"/games/{obj.id}"},
+            "update": {"href": f"/games/{obj.id}", "method": "PUT"},
+            "delete": {"href": f"/games/{obj.id}", "method": "DELETE"},
+        }
+
+    @post_dump()
+    def wrap_with_links(self, data, many, **kwargs):
+        if many:
+            return {
+                "games": data,
+                "_links": {
+                    "self": {"href": "/games"},
+                    "create": {"href": "/games", "method": "POST"}
+                }
+            }
+        return data
 
 game_cschema = GameSchema()
 games_cschema = GameSchema(many=True)
